@@ -122,11 +122,6 @@ repairMKV() {
   fi
 }
 
-export -f checkMKV
-export -f repairMKV
-export -f checkCompression
-export -f checkDate
-
 #####################################################################################
 #####################################################################################
 SAVEIFS=$IFS
@@ -178,7 +173,9 @@ if [[ -d $FILEPATH ]]
 then
   echo "Input argument is a folder: $FILEPATH" >> $LOGFILE
   # searching for files which end with .mkv and size min. 100MB (to skip the samples)
-  find "$FILEPATH" -name '*.mkv' -type f -size +100M -exec bash -c 'checkMKV "$0"' {} \;
+  while read -r -d $'\0'; do
+    checkMKV "$REPLY"
+  done < <(find "$FILEPATH" -name '*.mkv' -type f -size +100M -print0)
 
 # check if filepath is a file
 elif [[ -f $FILEPATH ]]
