@@ -32,7 +32,7 @@ checkMKV() {
     checkCompression
     if [[ $? -eq 3 ]]
     then
-      MKVVERSION=$(mkvinfo --ui-language en_US "$FILE" | grep "Writing" | awk '{print $6}')
+      MKVVERSION=$(mkvinfo --ui-language en_US "$FILE" | awk '/Writing/ {print $6}')
       MKVVERSION=${MKVVERSION:1}
       if [[ -z $MKVVERSION ]]
       then
