@@ -32,11 +32,11 @@ checkMKV() {
     checkCompression
     if [[ $? -eq 3 ]]
     then
-      MKVVERSION=$(mkvinfo --ui-language en_US "$FILE" | awk '/Writing/ {print $6}')
-      MKVVERSION=${MKVVERSION:1}
+      MKVVERSION=$(mkvinfo --ui-language en_US "$FILE" | sed -n -e 's/^.*Writing.*[Mm][Kk][Vv][Mm][Ee][Rr][Gg][Ee].*\([0-9]\.[0-9]\.[0-9]\).*$/\1/p')
       if [[ -z $MKVVERSION ]]
       then
         echo 'Unable to get the mkv version from your file!' | tee -a $LOGFILE
+        repairMKV
       else
         if [[ $MKVVERSION > $MKVWORKS ]]
         then
